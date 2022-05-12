@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec 21 20:45:40 2020
+
+@author: mirac
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec 12 16:38:40 2020
+
+@author: mirac
+"""
+import excel_reader_var as exr
+import urllib.request, json 
+
+with urllib.request.urlopen("https://api.trendyol.com/sapigw-product/product-categories") as url:
+    data = json.loads(url.read().decode())
+  
+    
+  
+with urllib.request.urlopen("https://api.trendyol.com/sapigw/product-categories/411/attributes") as url_2:
+    
+    altozellik = json.loads(url_2.read().decode())
+attrlist=[]  
+varlist=[]  
+name = altozellik.get('name')
+attrlist.insert(len(attrlist),name)
+categoriAttributes = altozellik.get('categoryAttributes')
+for i in categoriAttributes:
+    attrlist.insert(len(attrlist),i.get('attribute').get('name'))
+    print(i.get('attribute').get('name'))
+    attrlist.insert(len(attrlist),i.get('varianter'))
+    
+    for x in i.get('attributeValues'):
+        varlist.append(x.get('name'))
+    attrlist.insert(len(attrlist),varlist)
+    print(i.get('varianter'))
+    exr.addsheet(attrlist)
+    del attrlist[1:]
+    varlist.clear()
